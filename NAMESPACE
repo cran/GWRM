@@ -1,0 +1,5 @@
+export(
+  "GWRM.fit",
+  "GWRM.add",
+  "GWRM.stats",
+  "GWRM.display")
