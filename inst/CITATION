@@ -1,21 +1,15 @@
-citHeader("To cite package 'GWRM' in publications use:")
-     
-     desc <- packageDescription("GWRM")
-     year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
-     vers <- paste("R package version", desc$Version)
-     
-     citEntry(entry="Manual",
-              title = "GWRM: Generalized Waring Regression Models",
-              author = personList(as.person("Antonio Jose Saez-Castillo"),
-                                  as.person("Jose Rodriguez-Avi"),
-                                  as.person("Antonio Conde-Sanchez"),
-                                  as.person("Maria Jose Olmo-Jimenez"),
-                                  as.person("Ana Maria Martinez-Rodriguez")),
-              year = 2009,
-              note = 1.1,
-     
-              textVersion =
-              paste("Antonio Jose Saez-Castillo, Jose Rodriguez-Avi, Antonio Conde-Sanchez, Maria Jose Olmo-Jimenez, Ana Maria Martinez-Rodriguez (",
-                    year,
-                    "). GWRM: Generalized Waring Regression Models. ",
-                    vers, ".", sep=""))
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("GWRM R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "{GWRM}: Generalized Waring Regression Model for Count Data",
+         author = c(
+    person("Antonio Jose", "Saez-Castillo"),
+    person("Silverio", "Vilchez-Lopez"),
+    person("Maria Jose", "Olmo-Jimenez"),
+    person("Jose", "Rodriguez-Avi"),
+    person("Antonio", "Conde-Sanchez"),
+    person("Ana Maria", "Martinez-Rodriguez")),
+         year = year,
+         note = note,
+         url = "http://CRAN.R-project.org/package=GWRM")

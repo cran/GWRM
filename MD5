@@ -1,0 +1,15 @@
+d07a6423cd080d5022c239a743997026 *DESCRIPTION
+0491836d7022d03598f2c241feaf6f9c *NAMESPACE
+b9a763fbab5390a486516f6be98f7fea *R/gw.r
+9e1c30fbddfa385f05e61500329d5e8a *build/partial.rdb
+df282b9039d250e08319a72a700e657d *data/goals.RData
+44db9b9ca6ba10ccfa8d76e155d5ebdd *inst/CITATION
+7a5e3d70a56db13f08b35d5d78f67ec0 *inst/NEWS.Rd
+8669203fb025ee34086cfe76ad15762b *man/GWRM-package.Rd
+146218456e6ddfee2fbdb85550794da3 *man/add1.gw.Rd
+ffa5f9588747d23d4c84be32ae49b6e8 *man/drop1.gw.Rd
+7a91d00c6a33e738be8780611513a3a3 *man/goals.Rd
+ebd16c5e1932d2acba7a9a68fc84f379 *man/gw.Rd
+e657c6c483ccca54058698ecb2d9f06f *man/partvar.Rd
+39812356ce2b52356b29205b48dffd20 *man/predict.gw.Rd
+714d7276bf829d2508daa368abcace68 *man/residuals.gw.Rd

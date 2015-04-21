@@ -1,5 +1,18 @@
-export(
-  "GWRM.fit",
-  "GWRM.add",
-  "GWRM.stats",
-  "GWRM.display")
+import(SuppDists)
+export(gw)
+S3method(print, gw)
+S3method(predict, gw)
+#S3method(print, predict.gw)
+export(partvar)
+S3method(partvar, default)
+#S3method(print, partvar)
+S3method(residuals, gw)
+S3method(logLik, gw)
+S3method(summary, gw)
+S3method(print, summary.gw)
+S3method(extractAIC, gw)
+S3method(formula, gw)
+S3method(add1, gw)
+S3method(drop1, gw)
+S3method(model.frame, gw)
+S3method(model.matrix, gw)
