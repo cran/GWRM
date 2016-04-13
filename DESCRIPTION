@@ -1,8 +1,8 @@
 Package: GWRM
 Type: Package
 Title: Generalized Waring Regression Model for Count Data
-Version: 2.1.0.1
-Date: 2016-02-08
+Version: 2.1.0.2
+Date: 2016-04-07
 Authors@R: c(
     person("Antonio Jose", "Saez-Castillo", role = c("aut", "cre"), email = "ajsaez@ujaen.es"),
     person("Silverio", "Vilchez-Lopez", role = "aut", email = "svilchez@ujaen.es"),
@@ -18,7 +18,7 @@ Description: Statistical functions to fit, validate and describe a Generalized
 License: GPL-2 | GPL-3
 LazyData: true
 NeedsCompilation: no
-Packaged: 2016-02-08 07:37:43 UTC; UJA
+Packaged: 2016-04-11 05:58:01 UTC; UJA
 Author: Antonio Jose Saez-Castillo [aut, cre],
   Silverio Vilchez-Lopez [aut],
   Maria Jose Olmo-Jimenez [aut],
@@ -26,4 +26,4 @@ Author: Antonio Jose Saez-Castillo [aut, cre],
   Antonio Conde-Sanchez [aut],
   Ana Maria Martinez-Rodriguez [aut]
 Repository: CRAN
-Date/Publication: 2016-02-08 23:52:29
+Date/Publication: 2016-04-13 17:59:12

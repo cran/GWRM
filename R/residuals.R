@@ -3,7 +3,7 @@
 #' residuals is a method which extracts model residuals from \code{"gw"}, commonly returned by \code{gw} function. Optionally, it produces a normal plot with a simulated envelope of the residuals.
 #'
 #' @param object	object of class \code{"gw"} holding the fitted model
-#' @param type type of residuals to be extracted. Default is \code{"pearson"}. \code{"response"} and \code{"deviance"} are also available.
+#' @param type type of residuals to be extracted. Default is \code{"pearson"}. \code{"response"} and \code{"deviance"} are also available. Deviance residuals are defined as \eqn{2[ln f(y_i|y_i)-ln f(\widehat{\mu}_i|y_i)]}, so that their sum is the value of the deviance statistic.
 #' @param rep	number of replications for envelope construction. Default is 19, that is the smallest 95 percent band that can be built.
 #' @param envelope	a logical value to specify if the envelope is required.
 #' @param title	a title for the envelope.
@@ -43,10 +43,18 @@ residuals.gw <- function(object, type = "pearson", rep = 19, envelope = FALSE, t
       }
     }
     if (type == 'deviance'){
-      a <- mu * (ro - 1) / k
-      gama <- a + k + ro
+      diflogdgw<-function(p,k,ro){
+        y<-p[1]
+        a<-p[2]
+        if(y==0) -lgamma(k+ro)-lgamma(a+ro)+lgamma(ro)+lgamma(a+k+ro)
+        else{
+          lgamma(y*(ro-1)/k+ro)+lgamma(y*(ro-1)/k+y)-lgamma(y*(ro-1)/k)-lgamma(y*(ro-1)/k+k+ro+y)-lgamma(a+ro)-lgamma(a+y)+lgamma(a)+lgamma(a+k+ro+y)
+        }
+      }
       y <- object$Y
-      residuos <- sort(2 * (lgamma(a + y) + lgamma(k + y) - lgamma(gama + y) - (lgamma(a + mu) + lgamma(k + mu) - lgamma(gama + mu))))
+      a <- mu*(ro-1)/k
+      p <- cbind(y,a)
+      residuos <- 2*sort(apply(p,1,k,ro,FUN=diflogdgw))
       return(residuos)
     }
     if (type == 'response'){
@@ -73,13 +81,14 @@ residuals.gw <- function(object, type = "pearson", rep = 19, envelope = FALSE, t
       clusterExport(cl, list("object","rgw","type"),
                     envir=environment())
 
-      residuos.sim <- foreach(j=1:(rep-1), .combine = cbind,.multicombine = TRUE,.inorder=FALSE,.packages=c("GWRM"),.verbose=as.logical(trace)) %dopar%{
+      #residuos.sim <- foreach(j=1:(rep-1), .combine = cbind,.multicombine = TRUE,.inorder=FALSE,.packages=c("GWRM"),.verbose=as.logical(trace)) %dopar%{
+      residuos.sim <- foreach(j=1:rep, .combine = cbind,.multicombine = TRUE,.inorder=FALSE,.packages=c("GWRM"),.verbose=as.logical(trace)) %dopar%{
         converged<-FALSE
         varResponse<-getResponse(object$formula)
         datos <- object$data[rep(1:nrow(object$data), object$W),]
         datos[varResponse]<-as.matrix(rgw(n, a, k, ro))
         while(!converged){
-          fit <- try(GWRM::gw(object$formula, data = datos, k = object$k, method = object$methodCode), silent = TRUE)
+          fit <- try(GWRM::gw(object$formula, data = datos, k = object$k), silent = TRUE)
           if(fit$aic>0 && fit$betaIIpars[2]>2)
             converged<-TRUE
           else{ ##Generate new response values
@@ -90,13 +99,14 @@ residuals.gw <- function(object, type = "pearson", rep = 19, envelope = FALSE, t
       }
       stopCluster(cl)
     }else{
-      residuos.sim <- foreach(j=1:(rep-1), .combine = cbind,.multicombine = TRUE,.inorder=FALSE,.packages=c("GWRM"),.verbose=as.logical(trace)) %do%{
+      #residuos.sim <- foreach(j=1:(rep-1), .combine = cbind,.multicombine = TRUE,.inorder=FALSE,.packages=c("GWRM"),.verbose=as.logical(trace)) %do%{
+      residuos.sim <- foreach(j=1:rep, .combine = cbind,.multicombine = TRUE,.inorder=FALSE,.packages=c("GWRM"),.verbose=as.logical(trace)) %do%{
         converged<-FALSE
         varResponse<-getResponse(object$formula)
         datos <- object$data[rep(1:nrow(object$data), object$W),]
         datos[varResponse]<-as.matrix(rgw(n, a, k, ro))
         while(!converged){
-          fit <- try(GWRM::gw(object$formula, data = datos, k = object$k, method = object$methodCode), silent = TRUE)
+          fit <- try(GWRM::gw(object$formula, data = datos, k = object$k), silent = TRUE)
           if(fit$aic>0 && fit$betaIIpars[2]>2)
             converged<-TRUE
           else{ ##Generate new response values
@@ -120,6 +130,9 @@ residuals.gw <- function(object, type = "pearson", rep = 19, envelope = FALSE, t
     plot(normal.score, residuos, type = "l", xlab = "Standard normal quantiles", ylab = paste("Residuals ","(",type[1],")", sep = ""), main = title)
     polygon(xx, yy, col = "gray", border = NA)
     lines(normal.score, residuos)
+#     for (j in 2:rep){
+#       lines(normal.score, residuos.sim[,j])
+#     }
   }
 
   et <- proc.time()
