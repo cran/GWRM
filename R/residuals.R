@@ -21,7 +21,7 @@
 #' fit0 <- gw(goals ~ position, data = goals[sample(1:nrow(goals), 75), ])
 #' residuals(fit0, type = "pearson", rep = 19, envelope = TRUE, trace = FALSE, ncores = 2)
 #'
-#' @importFrom stats qnorm
+#' @importFrom stats qnorm na.omit
 #' @importFrom graphics lines plot polygon
 #' @importFrom doParallel registerDoParallel
 #' @importFrom parallel makeCluster stopCluster clusterExport detectCores
@@ -74,6 +74,7 @@ residuals.gw <- function(object, type = "pearson", rep = 19, envelope = FALSE, t
     a <- mu * (ro - 1) / k
 
     n<-sum(object$W)
+    object$data <- na.omit(object$data[all.vars(object$formula)])
 
     if (parallel){
       cl <- makeCluster(ncores)
